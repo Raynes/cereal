@@ -1,6 +1,6 @@
 # Cereal
 
-Cereal is a simple serialization library with pluggable backends. Right now, it supports Java serialization. It will support others in the future.
+Cereal is a simple serialization library with pluggable backends. It supports serialization and byte appending with the Protobuf and Reader backends, and serialization with basic Java serialization.
 
 Cereal is still very much in the planning and experimentation stage, so things are likely to change on a whim very often. Be careful when relying on snapshots.
 
