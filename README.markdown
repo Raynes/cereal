@@ -24,3 +24,7 @@ Pick a backend and encode some data! It's easy. Here is an REPL session using th
     (0 1 2 3 4 5 6 7 8 9)
 
 Easy enough, right? Other backends will be just as easy.
+
+# Notes
+
+To use the protobuf format, you need to depend on clojure-protobuf. You'd almost certainly want to do this anyway, because its cake plugin makes it really easy to work with protobufs. You should depend on whatever version of clojure-protobuf that cereal is tested with. You can find out what that version is by looking at its project.clj file.
