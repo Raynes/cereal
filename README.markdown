@@ -8,7 +8,7 @@ Cereal is still very much in the planning and experimentation stage, so things a
 
 You can get Cereal from Clojars with cake. Just add this to your `:dependencies`:
 
-    [cereal "0.1.0-SNAPSHOT"]
+    [cereal "0.1.1"]
 
 # Usage
 
