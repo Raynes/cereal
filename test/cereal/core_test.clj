@@ -5,19 +5,15 @@
             [cereal.protobuf :as proto])
   (:import cereal.Test$Foo))
 
-(def serializable (range 10))
-
-(deftest serialize-test
-  (doseq [format [(java/make) (reader/make) (proto/make Test$Foo)]]
-    (testing "decode an encoded data structure"
-      (let [val {:foo 1 :bar 2}]
-        (is (= val (decode format (encode format val))))))))
-
 (defn catbytes [& args]
   (.getBytes (apply str (map #(String. %) args))))
 
-(deftest append-test
-  (doseq [format [(reader/make) (proto/make Test$Foo)]]
+(deftest cereal-test
+  (doseq [format [(reader/make) (proto/make Test$Foo) (java/make)]]
+    (testing "decode an encoded data structure"
+      (let [val {:foo 1 :bar 2}]
+        (is (= val (decode format (encode format val))))))
+    
     (testing "append two simple encoded data structures"
       (let [data1 (encode format {:foo 1 :bar 2})
             data2 (encode format {:foo 4 :baz 8})]
