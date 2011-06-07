@@ -1,4 +1,5 @@
 (ns cereal.java
+  "Java serialization backend."
   (:use cereal.format
         gloss.core)
   (:require [gloss.io :as io])

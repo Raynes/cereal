@@ -1,4 +1,5 @@
 (ns cereal.reader
+  "Reader backend"
   (:use [useful :only [adjoin]]
         cereal.format))
 

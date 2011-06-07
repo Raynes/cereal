@@ -1,4 +1,5 @@
 (ns cereal.protobuf
+  "Protobuf backend."
   (:use protobuf cereal.format))
 
 (deftype ProtobufFormat [proto]
