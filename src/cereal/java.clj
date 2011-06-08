@@ -1,11 +1,8 @@
 (ns cereal.java
   "Java serialization backend."
-  (:use cereal.format
-        gloss.core)
-  (:require [gloss.io :as io])
+  (:use [cereal format netstring])
   (:import (java.io ByteArrayInputStream ByteArrayOutputStream
-                    ObjectInputStream ObjectOutputStream)
-           java.nio.ByteBuffer))
+                    ObjectInputStream ObjectOutputStream)))
 
 (defn- unserialize [data]
   (-> data
@@ -14,14 +11,6 @@
       ByteArrayInputStream.
       ObjectInputStream.
       .readObject))
-
-(def netstring
-  (finite-frame
-   (prefix
-    (string-integer :ascii :delimiters [":"])
-    inc
-    dec)
-   (string :utf-8 :suffix ",")))
 
 (defn adjoin
   "Same as adjoin from clojure-useful, but works with screwed up booleans."
@@ -46,18 +35,15 @@
   (encode [format data]
     (let [byte-stream (ByteArrayOutputStream.)]
       (.writeObject (ObjectOutputStream. byte-stream) data)
-      (.array
-       (io/contiguous
-        (io/encode netstring (String. (.toByteArray byte-stream)))))))
+      (encode-netstring (String. (.toByteArray byte-stream)))))
 
   (decode [format data]
     (apply merge-with adjoin
-           (map unserialize (io/decode-all netstring data))))
+           (map unserialize (decode-netstring data))))
 
   (decode [format data offset len]
     (apply merge-with adjoin
            (map unserialize
-                (io/decode-all netstring
-                               (ByteBuffer/wrap data offset len))))))
+                (decode-netstring data offset len)))))
 
 (defn make [] (JavaFormat.))
