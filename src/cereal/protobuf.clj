@@ -15,7 +15,7 @@
     (if data (protobuf-load proto data offset len)))
 
   (fields [format]
-    (map first (protofields proto))))
+    (protofields proto)))
 
 (defn make [proto]
   (ProtobufFormat. (protodef proto)))
