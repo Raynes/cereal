@@ -1,4 +1,4 @@
-(defproject cereal "0.1.2"
+(defproject cereal "0.1.3"
   :description "Dead simple serialization in Clojure."
   :dependencies [[clojure "1.2.0"]
                  [clojure-useful "0.3.8"]

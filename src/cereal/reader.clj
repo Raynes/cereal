@@ -28,8 +28,7 @@
       (read-append defaults (String. data offset len))
       defaults))
 
-  (fields [format]
-    (keys defaults)))
+  (fields [format] defaults))
 
 (defn make [& [defaults]]
   (ReaderFormat. defaults))
