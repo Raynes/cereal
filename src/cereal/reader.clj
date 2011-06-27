@@ -1,5 +1,5 @@
 (ns cereal.reader
-  (:use [useful :only [adjoin]]
+  (:use [useful.utils :only [adjoin]]
         cereal.format))
 
 (defn- read-seq []
