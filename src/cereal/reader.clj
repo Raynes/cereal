@@ -1,5 +1,6 @@
 (ns cereal.reader
   (:use [useful.utils :only [adjoin]]
+        [useful.map :only [map-to]]
         cereal.format))
 
 (defn- read-seq []
@@ -28,7 +29,9 @@
       (read-append defaults (String. data offset len))
       defaults))
 
-  (fields [format] defaults))
+  (fields [format]
+    (map-to (or (meta defaults) {})
+            (keys defaults))))
 
 (defn make [& [defaults]]
   (ReaderFormat. defaults))
