@@ -68,4 +68,7 @@
             :num-map {:repeated true, :type :message},
             :nested  {:repeated false, :type :message},
             :rev     {:repeated false, :type :int}}
-           (fields format)))))
+           (fields format)))
+    (is (= {:key {:repeated false, :type :int},
+            :val {:repeated false, :type :string}}
+           (fields format :num-map)))))
