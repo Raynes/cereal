@@ -60,15 +60,18 @@
             :bar {:type :string :limit 8}}
            (fields format))))
   (let [format (proto/make Test$Foo)]
-    (is (= {:foo     {:repeated false, :type :int},
-            :bar     {:repeated false, :type :int},
-            :baz     {:repeated false, :type :int},
+    (is (= {:foo     {:type :int},
+            :bar     {:type :int},
+            :baz     {:type :int},
             :tags    {:repeated true, :type :string},
             :tag-set {:repeated true, :type :message},
             :num-map {:repeated true, :type :message},
-            :nested  {:repeated false, :type :message},
-            :rev     {:repeated false, :type :int}}
+            :nested  {:type :message},
+            :rev     {:type :int}}
            (fields format)))
-    (is (= {:key {:repeated false, :type :int},
-            :val {:repeated false, :type :string}}
-           (fields format :num-map)))))
+    (is (= {:key {:type :int},
+            :val {:type :string}}
+           (fields format [:num-map])))
+    (is (= {:key {:type :int},
+            :val {:type :string}}
+           (fields format [:nested :nested :num-map])))))

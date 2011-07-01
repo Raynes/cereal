@@ -18,7 +18,7 @@
     (protofields proto))
 
   (fields [format subfields]
-    (protofields proto subfields)))
+    (apply protofields proto subfields)))
 
 (defn make [proto]
   (ProtobufFormat. (protodef proto)))
