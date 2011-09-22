@@ -41,7 +41,7 @@
 
 (deftype JavaFormat []
   Format
-  
+
   (encode [format data]
     (let [byte-stream (ByteArrayOutputStream.)]
       (.writeObject (ObjectOutputStream. byte-stream) data)

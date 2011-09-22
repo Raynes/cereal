@@ -6,13 +6,21 @@
 
   (encode [format node]
     (protobuf-dump
-     (if (protobuf? node) node (protobuf proto node))))
+     (if (protobuf? node)
+       node
+       (protobuf proto node))))
 
   (decode [format data]
-    (if data (protobuf-load proto data)))
+    (when data
+      (protobuf-load proto data)))
 
   (decode [format data offset len]
-    (if data (protobuf-load proto data offset len)))
+    (when data
+      (protobuf-load proto data offset len)))
+
+  (decode-stream [format stream]
+    (when stream
+      (protobuf-load-stream proto stream)))
 
   (fields [format]
     (protofields proto))
