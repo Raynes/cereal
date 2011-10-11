@@ -1,5 +1,5 @@
 (ns cereal.protobuf
-  (:use protobuf cereal.format))
+  (:use protobuf.core cereal.format))
 
 (deftype ProtobufFormat [proto]
   Format
