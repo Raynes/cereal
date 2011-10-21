@@ -21,12 +21,12 @@
 
   (decode [format data]
     (if data
-      (read-append defaults (String. data))
+      (read-append defaults (String. ^bytes data))
       defaults))
 
   (decode [format data offset len]
     (if data
-      (read-append defaults (String. data offset len))
+      (read-append defaults (String. ^bytes data ^Integer offset ^Integer len))
       defaults))
 
   (fields [format]

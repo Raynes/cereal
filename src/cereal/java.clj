@@ -31,7 +31,7 @@
         (and (set? left) (map? right))
         (reduce
          (fn [set [k v]]
-           ((if (Boolean/valueOf v) conj disj) set k))
+           ((if (Boolean/valueOf ^Boolean v) conj disj) set k))
          left right)
 
         (coll? left)
@@ -41,7 +41,7 @@
 
 (deftype JavaFormat []
   Format
-  
+
   (encode [format data]
     (let [byte-stream (ByteArrayOutputStream.)]
       (.writeObject (ObjectOutputStream. byte-stream) data)
