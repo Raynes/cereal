@@ -1,26 +1,29 @@
 (ns cereal.java
   (:use cereal.format
-        gloss.core)
-  (:require [gloss.io :as io])
+        [clojure.string :only [join]])
   (:import (java.io ByteArrayInputStream ByteArrayOutputStream
                     ObjectInputStream ObjectOutputStream)
            java.nio.ByteBuffer))
 
-(defn- unserialize [data]
+(defn- unserialize [^String data]
   (-> data
-      str
       .getBytes
       ByteArrayInputStream.
       ObjectInputStream.
       .readObject))
 
-(def netstring
-  (finite-frame
-   (prefix
-    (string-integer :ascii :delimiters [":"])
-    inc
-    dec)
-   (string :utf-8 :suffix ",")))
+(defn netstring
+  "Create a netstring."
+  [message] (str (count message) ":" message ","))
+
+(defn parse-netstring [^String b]
+  (loop [acc [] s b]
+    (if (seq s)
+      (let [[len data] (.split s ":" 2)
+            [top bottom] (split-at (Integer/parseInt len) data)]
+        (recur (->> top join (conj acc))
+               (-> bottom rest join)))
+      acc)))
 
 (defn adjoin
   "Same as adjoin from clojure-useful, but works with screwed up booleans."
@@ -45,18 +48,15 @@
   (encode [format data]
     (let [byte-stream (ByteArrayOutputStream.)]
       (.writeObject (ObjectOutputStream. byte-stream) data)
-      (.array
-       (io/contiguous
-        (io/encode netstring (String. (.toByteArray byte-stream)))))))
+      (.getBytes ^String (netstring (String. (.toByteArray byte-stream))))))
 
   (decode [format data]
     (apply merge-with adjoin
-           (map unserialize (io/decode-all netstring data))))
+           (map unserialize (parse-netstring (String. ^bytes data)))))
 
   (decode [format data offset len]
     (apply merge-with adjoin
            (map unserialize
-                (io/decode-all netstring
-                               (ByteBuffer/wrap data offset len))))))
+                (String. ^bytes data ^Integer offset ^Integer len)))))
 
-(defn make [] (JavaFormat.))
+(defn make [] (JavaFormat.)) 
