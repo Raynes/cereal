@@ -1,12 +1,9 @@
 (ns cereal.codecs.append
-  (:use [cereal.formats :only [buf-seq->stream]]
-        [cereal.core :only [Fields fields]]
+  (:use [cereal.core :only [Fields fields]]
         [gloss.core.protocols :only [Reader Writer write-bytes sizeof]]
         [gloss.core.formats :only [to-buf-seq]]
         [gloss.core :only [finite-frame]]
-        [gloss.io :only [decode-all]]
-        [useful.map :only [map-to]]
-        [clojure.java.io :only [reader]])
+        [gloss.io :only [decode-all]])
   (:import (java.io PushbackReader)))
 
 (deftype Append [finite-codec combine-fn]
