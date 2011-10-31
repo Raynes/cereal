@@ -1,10 +1,10 @@
 (ns cereal.core
   (:use [gloss.core.protocols :only [Reader Writer]]
         [gloss.core.formats :only [to-buf-seq]]
-        [useful.map :only [map-to]]
         [useful.fn :only [fix]]
         [clojure.java.io :only [reader input-stream]])
-  (:require io.core gloss.core)
+  (:require io.core
+            [gloss.core :as gloss])
   (:import (java.nio ByteBuffer)
            (java.io PushbackReader InputStreamReader
                     ObjectInputStream ObjectOutputStream ByteArrayOutputStream)))
@@ -14,7 +14,6 @@
         Reader
         (read-bytes [this buf-seq]
           [true (.readObject (ObjectInputStream. (input-stream buf-seq))) nil])
-
         Writer
         (sizeof [this] nil)
         (write-bytes [this _ val]
@@ -25,7 +24,7 @@
              (.writeObject (ObjectOutputStream. byte-stream) val)
              (.toByteArray byte-stream)))))
       (fix repeated
-           #(gloss.core/repeated (gloss.core/finite-frame :int32 %) :prefix :none))))
+           #(gloss/repeated (gloss/finite-frame :int32 %) :prefix :none))))
 
 (defn- read-seq [in]
   (lazy-seq
@@ -43,7 +42,6 @@
           (if (next forms)
             (throw (Exception. "Bytes left over after decoding frame."))
             [true (first forms) nil]))))
-
     Writer
     (sizeof [this] nil)
     (write-bytes [this _ val]
