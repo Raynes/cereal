@@ -4,45 +4,50 @@
         [useful.map :only [map-to]]
         [useful.fn :only [fix]]
         [clojure.java.io :only [reader input-stream]])
-  (:require io.core)
+  (:require io.core gloss.core)
   (:import (java.nio ByteBuffer)
-           (java.io PushbackReader ObjectInputStream ObjectOutputStream ByteArrayOutputStream)))
+           (java.io PushbackReader InputStreamReader
+                    ObjectInputStream ObjectOutputStream ByteArrayOutputStream)))
 
-(defn java-codec [& {:keys [validator]}]
+(defn java-codec [& {:keys [validator repeated]}]
+  (-> (reify
+        Reader
+        (read-bytes [this buf-seq]
+          [true (.readObject (ObjectInputStream. (input-stream buf-seq))) nil])
+
+        Writer
+        (sizeof [this] nil)
+        (write-bytes [this _ val]
+          (when (and validator (not (validator val)))
+            (throw (IllegalStateException. "Invalid value in java-codec")))
+          (to-buf-seq
+           (let [byte-stream (ByteArrayOutputStream.)]
+             (.writeObject (ObjectOutputStream. byte-stream) val)
+             (.toByteArray byte-stream)))))
+      (fix repeated
+           #(gloss.core/repeated (gloss.core/finite-frame :int32 %) :prefix :none))))
+
+(defn- read-seq [in]
+  (lazy-seq
+   (let [form (read in false ::EOF)]
+     (when (not= ::EOF form)
+       (cons form (read-seq in))))))
+
+(defn clojure-codec [& {:keys [validator repeated]}]
   (reify
     Reader
     (read-bytes [this buf-seq]
-      [true (.readObject (ObjectInputStream. (input-stream buf-seq))) nil])
-
-    Writer
-    (sizeof [this] nil)
-    (write-bytes [this _ val]
-      (when (and validator (not (validator val)))
-        (throw (IllegalStateException. "Invalid value in java-codec")))
-      (to-buf-seq
-       (let [byte-stream (ByteArrayOutputStream.)]
-         (.writeObject (ObjectOutputStream. byte-stream) val)
-         (.toByteArray byte-stream))))))
-
-(defn clojure-codec [& {:keys [validator]}]
-  (reify
-    Reader
-    (read-bytes [this buf-seq]
-      (let [in  (PushbackReader. (reader buf-seq))
-            val (try (read in)
-                     (catch Exception e ::EOF))]
-        (if (= val ::EOF)
-          [false nil nil]
-          [true val (let [ch (.read in)
-                          buf-seq (drop-while #(not (.hasRemaining %)) buf-seq)]
-                      (fix buf-seq (not= -1 ch)
-                           (partial cons (ByteBuffer/wrap (byte-array [(byte ch)])))))])))
+      (let [forms (read-seq (PushbackReader. (reader buf-seq)))]
+        (if repeated
+          [true forms nil]
+          (if (next forms)
+            (throw (Exception. "Bytes left over after decoding frame."))
+            [true (first forms) nil]))))
 
     Writer
     (sizeof [this] nil)
     (write-bytes [this _ val]
       (when (and validator (not (validator val)))
         (throw (IllegalStateException. "Invalid value in clojure-codec")))
-      (to-buf-seq
-       (.getBytes
-        (pr-str val))))))
+      (map #(ByteBuffer/wrap (.getBytes (pr-str %)))
+           (fix val (not repeated) list)))))
