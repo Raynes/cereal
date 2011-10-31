@@ -1,4 +1,4 @@
-(defproject cereal "0.2.0-alpha1"
+(defproject cereal "0.2.0-alpha2"
   :description "Revisioned, appendable Gloss codecs."
   :dependencies [[clojure "1.2.0"]
                  [gloss "0.2.0-rc1"]
