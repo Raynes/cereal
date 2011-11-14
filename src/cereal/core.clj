@@ -13,7 +13,7 @@
   (-> (reify
         Reader
         (read-bytes [this buf-seq]
-          [true (.readObject (ObjectInputStream. (input-stream buf-seq))) nil])
+          [true, (.readObject (ObjectInputStream. (input-stream buf-seq))), nil])
         Writer
         (sizeof [this] nil)
         (write-bytes [this _ val]
@@ -37,11 +37,9 @@
     Reader
     (read-bytes [this buf-seq]
       (let [forms (read-seq (PushbackReader. (reader buf-seq)))]
-        (if repeated
-          [true forms nil]
-          (if (next forms)
-            (throw (Exception. "Bytes left over after decoding frame."))
-            [true (first forms) nil]))))
+        (cond repeated     [true forms nil]
+              (next forms) (throw (Exception. "Bytes left over after decoding frame."))
+              :else        [true (first forms) nil])))
     Writer
     (sizeof [this] nil)
     (write-bytes [this _ val]
