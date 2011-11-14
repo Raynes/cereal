@@ -2,7 +2,8 @@
   (:use [gloss.core.protocols :only [Reader Writer]]
         [gloss.core.formats :only [to-buf-seq]]
         [useful.fn :only [fix]]
-        [clojure.java.io :only [reader input-stream]])
+        [useful.io :only [read-seq]]
+        [clojure.java.io :only [input-stream]])
   (:require io.core
             [gloss.core :as gloss])
   (:import (java.nio ByteBuffer)
@@ -26,17 +27,11 @@
       (fix repeated
            #(gloss/repeated (gloss/finite-frame :int32 %) :prefix :none))))
 
-(defn- read-seq [in]
-  (lazy-seq
-   (let [form (read in false ::EOF)]
-     (when (not= ::EOF form)
-       (cons form (read-seq in))))))
-
 (defn clojure-codec [& {:keys [validator repeated]}]
   (reify
     Reader
     (read-bytes [this buf-seq]
-      (let [forms (read-seq (PushbackReader. (reader buf-seq)))]
+      (let [forms (read-seq buf-seq)]
         (cond repeated     [true forms nil]
               (next forms) (throw (Exception. "Bytes left over after decoding frame."))
               :else        [true (first forms) nil])))
