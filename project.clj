@@ -1,6 +1,6 @@
-(defproject cereal "0.1.10"
-  :description "Dead simple serialization in Clojure."
+(defproject cereal "0.2.0-alpha2"
+  :description "Revisioned, appendable Gloss codecs."
   :dependencies [[clojure "1.2.0"]
-                 [useful "0.7.0"]]
-  :dev-dependencies [[protobuf "0.5.0-beta1"]]
-  :cake-plugins [[cake-protobuf "0.5.0-beta1"]])
+                 [gloss "0.2.0-rc1"]
+                 [useful "0.7.5-alpha2"]
+                 [io "0.1.0-alpha1"]])
