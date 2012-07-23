@@ -1,3 +1,5 @@
+[![Build Status](https://secure.travis-ci.org/flatland/cereal.png)](http://travis-ci.org/flatland/cereal)
+
 # Cereal
 
 Cereal is a simple serialization library with pluggable backends. It supports serialization and byte appending with the Protobuf, Reader, and Java backends.
