@@ -1,12 +1,12 @@
-(defproject org.flatland/cereal "0.2.0"
+(defproject org.flatland/cereal "0.2.1-SNAPSHOT"
   :url "https://github.com/flatland/cereal"
   :license {:name "Eclipse Public License - v 1.0"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :description "Revisioned, appendable Gloss codecs."
   :dependencies [[org.clojure/clojure "1.4.0"]
-                 [gloss "0.2.1"]
-                 [useful "0.8.4"]
-                 [io "0.2.1"]]
+                 [org.flatland/useful "0.8.9-SNAPSHOT"]
+                 [org.flatland/io "0.2.2-SNAPSHOT"]
+                 [gloss "0.2.1"]]
   :aliases {"testall" ["with-profile" "dev,default:dev,1.3,default:dev,1.5,default" "test"]}
   :profiles {:1.3 {:dependencies [[org.clojure/clojure "1.3.0"]]}
              :1.5 {:dependencies [[org.clojure/clojure "1.5.0-master-SNAPSHOT"]]}}

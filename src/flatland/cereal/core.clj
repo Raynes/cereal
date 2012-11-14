@@ -1,10 +1,10 @@
 (ns flatland.cereal.core
   (:use [gloss.core.protocols :only [Reader Writer]]
         [gloss.core.formats :only [to-buf-seq]]
-        [useful.fn :only [fix]]
-        [useful.io :only [read-seq]]
+        [flatland.useful.fn :only [fix]]
+        [flatland.useful.io :only [read-seq]]
         [clojure.java.io :only [input-stream]])
-  (:require io.core
+  (:require flatland.io.core
             [gloss.core :as gloss])
   (:import (java.nio ByteBuffer)
            (java.io PushbackReader InputStreamReader

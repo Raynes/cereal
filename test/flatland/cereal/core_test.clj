@@ -1,7 +1,7 @@
 (ns flatland.cereal.core-test
   (:use clojure.test flatland.cereal.core gloss.io
         [gloss.core :only [repeated compile-frame finite-frame]]
-        [useful.utils :only [adjoin]])
+        [flatland.useful.utils :only [adjoin]])
   (:import (java.nio ByteBuffer)))
 
 (deftest simple-codecs
