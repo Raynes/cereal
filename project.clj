@@ -1,4 +1,4 @@
-(defproject cereal "0.2.0"
+(defproject org.flatland/cereal "0.2.0"
   :url "https://github.com/flatland/cereal"
   :license {:name "Eclipse Public License - v 1.0"
             :url "http://www.eclipse.org/legal/epl-v10.html"}

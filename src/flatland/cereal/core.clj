@@ -1,4 +1,4 @@
-(ns cereal.core
+(ns flatland.cereal.core
   (:use [gloss.core.protocols :only [Reader Writer]]
         [gloss.core.formats :only [to-buf-seq]]
         [useful.fn :only [fix]]
