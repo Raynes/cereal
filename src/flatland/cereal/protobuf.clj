@@ -38,3 +38,12 @@
                                                (bit-and n lower-7))))
                   (recur (inc i) (bit-shift-right n 7)))))
           [(ByteBuffer/wrap target)])))))
+
+(def field-label
+  (gloss/compile-frame varint
+                       (fn [[field-number wire-type]]
+                         (bit-or (bit-shift-left field-number 3)
+                                 wire-type))
+                       (fn [encoded-value]
+                         [(bit-shift-right encoded-value 3)
+                          (bit-and encoded-value 0x7)])))
