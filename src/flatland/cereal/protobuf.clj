@@ -1,4 +1,4 @@
-(ns cereal.core
+(ns flatland.cereal.protobuf
   (:require [gloss.core :as gloss]
             [gloss.core.protocols :as protocol]
             [gloss.data.bytes :as bytes]
