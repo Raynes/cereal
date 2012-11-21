@@ -13,15 +13,15 @@
     (reify
       protocol/Reader
       (read-bytes [this original-bufseq]
-        (loop [acc 0, mult 1, bufseq original-bufseq]
+        (loop [acc 0, shift 0, bufseq original-bufseq]
           (let [[success x bufseq] (protocol/read-bytes byte-codec bufseq)]
             (if-not success
               [false this original-bufseq]
               (if (zero? (bit-and x top-bit))
-                [true (+ acc (* mult x)) bufseq]
-                (recur (+ acc (* mult
-                                 (bit-and x lower-7)))
-                       (bit-shift-left mult n-bits)
+                [true (+ acc (bit-shift-left x shift)) bufseq]
+                (recur (+ acc (bit-shift-left (bit-and x lower-7)
+                                              shift))
+                       (+ shift n-bits)
                        bufseq))))))
 
       protocol/Writer
