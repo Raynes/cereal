@@ -24,6 +24,8 @@
                        (+ shift n-bits)
                        bufseq))))))
 
+      ;; TODO make arithmetic primitive
+
       protocol/Writer
       (sizeof [this] nil)
       (write-bytes [this b n]
