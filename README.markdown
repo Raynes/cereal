@@ -10,13 +10,13 @@ Cereal is still very much in the planning and experimentation stage, so things a
 
 You can get Cereal from Clojars with cake. Just add this to your `:dependencies`:
 
-    [cereal "0.1.1"]
+    [org.flatland/cereal "0.3.0"]
 
 # Usage
 
 Pick a backend and encode some data! It's easy. Here is an REPL session using the Java serialization backend:
 
-    user=> (use '[cereal format java])
+    user=> (use '[flatland.cereal format java])
     nil
     user=> (def format (make))
     #'user/format
