@@ -3,7 +3,7 @@
             [gloss.core.formats :refer [to-buf-seq]]
             [flatland.useful.fn :refer [fix]]
             [flatland.useful.io :refer [read-seq]]
-            [cheshire.core :refer [parsed-seq encode]]
+            [cheshire.core :as cheshire :refer [parsed-seq]]
             [clojure.java.io :refer [input-stream reader]]
             flatland.io.core
             [gloss.core :as gloss])
@@ -40,7 +40,7 @@
     (write-bytes [this _ val]
       (when (and validator (not (validator val)))
         (throw (IllegalStateException. "Invalid value in edn-codec")))
-      (map #(ByteBuffer/wrap (.getBytes (encode %)))
+      (map #(ByteBuffer/wrap (.getBytes (cheshire/encode %)))
            (fix val (not repeated) list)))))
 
 (defn edn-codec [& {:keys [validator repeated]}]
