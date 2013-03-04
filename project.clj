@@ -4,7 +4,7 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :description "Revisioned, appendable Gloss codecs."
   :dependencies [[org.clojure/clojure "1.5.0"]
-                 [org.flatland/useful "0.9.4"]
+                 [org.flatland/useful "0.9.5"]
                  [org.flatland/io "0.3.0"]
                  [gloss "0.2.2-beta5"]]
   :aliases {"testall" ["with-profile" "dev,default:dev,1.4,default:dev,1.6,default" "test"]}

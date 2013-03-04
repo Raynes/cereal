@@ -5,12 +5,12 @@
   (:import (java.nio ByteBuffer)))
 
 (deftest simple-codecs
-  (doseq [codec [(clojure-codec) (java-codec)]]
+  (doseq [codec [(edn-codec) (java-codec)]]
     (testing "decode an encoded data structure"
       (let [val {:foo 1 :bar 2}]
         (is (= val (decode codec (encode codec val)))))))
 
-  (doseq [codec [(clojure-codec :validator map?) (java-codec :validator map?)]]
+  (doseq [codec [(edn-codec :validator map?) (java-codec :validator map?)]]
     (testing "validators"
       (is (thrown-with-msg? IllegalStateException #"Invalid"
             (encode codec [1 2 3 4]))))))
@@ -19,7 +19,7 @@
   (compile-frame codec list (partial reduce adjoin)))
 
 (deftest appending
-  (doseq [codec [(adjoining (clojure-codec :repeated true))
+  (doseq [codec [(adjoining (edn-codec :repeated true))
                  (adjoining (java-codec    :repeated true))]]
     (testing "append two simple encoded data structures"
       (let [data1 (encode codec {:foo 1 :bar 2})
