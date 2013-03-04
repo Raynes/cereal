@@ -19,7 +19,7 @@
         (sizeof [this] nil)
         (write-bytes [this _ val]
           (when (and validator (not (validator val)))
-            (throw (IllegalStateException. "Invalid value in java-codec")))
+            (throw (IllegalStateException. (format "Invalid value %s in java-codec" val))))
           (to-buf-seq
            (let [byte-stream (ByteArrayOutputStream.)]
              (.writeObject (ObjectOutputStream. byte-stream) val)
@@ -39,7 +39,7 @@
     (sizeof [this] nil)
     (write-bytes [this _ val]
       (when (and validator (not (validator val)))
-        (throw (IllegalStateException. "Invalid value in edn-codec")))
+        (throw (IllegalStateException. (format "Invalid value %s in json-codec" val))))
       (map #(ByteBuffer/wrap (.getBytes (cheshire/encode %)))
            (fix val (not repeated) list)))))
 
@@ -55,6 +55,6 @@
     (sizeof [this] nil)
     (write-bytes [this _ val]
       (when (and validator (not (validator val)))
-        (throw (IllegalStateException. "Invalid value in edn-codec")))
+        (throw (IllegalStateException. (format "Invalid value %s in edn-codec" val))))
       (map #(ByteBuffer/wrap (.getBytes (pr-str %)))
            (fix val (not repeated) list)))))
